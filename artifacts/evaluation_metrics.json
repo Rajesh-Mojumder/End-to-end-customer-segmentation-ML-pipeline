@@ -1,0 +1,7 @@
+{
+  "n_clusters": 2,
+  "n_samples": 49980,
+  "silhouette_score": 0.245132,
+  "davies_bouldin_index": 1.605302,
+  "calinski_harabasz_score": 16094.5
+}
