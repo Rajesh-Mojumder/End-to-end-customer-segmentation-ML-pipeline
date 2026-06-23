@@ -1,0 +1,66 @@
+# ============================================================
+# Customer Segmentation Project - Configuration
+# ============================================================
+
+project:
+  name: "Customer Segmentation ML Project"
+  version: "1.0.0"
+  random_seed: 42
+
+paths:
+  data_raw: "data/ecommerce_customer_churn_dataset.csv"
+  data_processed: "data/processed_data.csv"
+  models_dir: "models/"
+  artifacts_dir: "artifacts/"
+  screenshots_dir: "screenshots/"
+  mlruns_dir: "mlruns/"
+
+model:
+  algorithm: "KMeans"
+  k_min: 2
+  k_max: 10
+  n_init: 10
+  max_iter: 300
+  pca_components: 2
+
+features:
+  numerical:
+    - Age
+    - Membership_Years
+    - Login_Frequency
+    - Session_Duration_Avg
+    - Pages_Per_Session
+    - Cart_Abandonment_Rate
+    - Wishlist_Items
+    - Total_Purchases
+    - Average_Order_Value
+    - Days_Since_Last_Purchase
+    - Discount_Usage_Rate
+    - Returns_Rate
+    - Email_Open_Rate
+    - Customer_Service_Calls
+    - Product_Reviews_Written
+    - Social_Media_Engagement_Score
+    - Mobile_App_Usage
+    - Payment_Method_Diversity
+    - Lifetime_Value
+    - Credit_Balance
+  engineered:
+    - Total_Spending
+    - Purchase_Frequency
+    - RFM_Recency
+    - RFM_Frequency
+    - RFM_Monetary
+
+mlflow:
+  experiment_name: "customer_segmentation"
+  tracking_uri: "mlruns"
+  run_name: "kmeans_clustering"
+
+segments:
+  labels:
+    - "VIP Customers"
+    - "Loyal Customers"
+    - "Potential Customers"
+    - "New Customers"
+    - "At-Risk Customers"
