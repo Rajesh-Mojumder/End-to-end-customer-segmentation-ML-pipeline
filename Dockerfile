@@ -1,51 +1,16 @@
-# ============================================================
-# Customer Segmentation App - Dockerfile
-# ============================================================
-FROM python:3.11-slim
+FROM python:3.8-slim-buster
 
-# Metadata
-LABEL maintainer="Customer Segmentation ML Project"
-LABEL version="1.0.0"
-
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    gcc \
-    g++ \
-    && rm -rf /var/lib/apt/lists/*
+COPY . /app
 
-# Copy requirements first (layer caching)
-COPY requirements.txt .
+RUN pip install --upgrade pip
 
-# Install Python dependencies
-RUN pip install --no-cache-dir --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt
+RUN pip install -r requirements.txt
 
-# Copy project files
-COPY . .
+# Train the model during Docker build so model.joblib exists at runtime
+RUN python main.py
 
-# Create necessary directories
-RUN mkdir -p models artifacts data mlruns screenshots
+EXPOSE 8080
 
-# Copy data if present
-# (In production, mount via -v or use cloud storage)
-
-# Environment variables
-ENV PYTHONPATH=/app
-ENV MLFLOW_ALLOW_FILE_STORE=true
-
-# Expose Streamlit port
-EXPOSE 8501
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8501/_stcore/health || exit 1
-
-# Run Streamlit app
-CMD ["streamlit", "run", "app/app.py", \
-     "--server.port=8501", \
-     "--server.address=0.0.0.0", \
-     "--server.headless=true", \
-     "--browser.gatherUsageStats=false"]
+CMD ["python3", "app.py"]
